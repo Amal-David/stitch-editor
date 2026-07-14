@@ -1,0 +1,56 @@
+name: bootstrap
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  bootstrap:
+    name: ${{ matrix.os }} offline bootstrap
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-15
+            compiler: apple-clang
+            vcvarsall: false
+          - os: windows-2022
+            compiler: msvc
+            vcvarsall: true
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: dtolnay/rust-toolchain@e97e2d8cc328f1b50210efc529dca0028893a2d9 # v1
+        with:
+          toolchain: 1.90.0
+          components: rustfmt, clippy
+      - name: Provision pinned CMake
+        uses: aminya/setup-cpp@8170d66c458f4a045220b7b0966c10940bb2a15d # v1.8.1
+        with:
+          cmake: 3.31.6
+          compiler: ${{ matrix.compiler }}
+          vcvarsall: ${{ matrix.vcvarsall }}
+      - name: Provision pinned Qt before offline build
+        uses: jurplel/install-qt-action@48d3ad6db93f3627c8ee7a0454bc6f3744f7e730 # v4.3.1
+        with:
+          version: 6.11.1
+          cache: false
+      - name: Run policy, formatting, lint, test discovery, and Qt bootstrap
+        shell: bash
+        run: ./scripts/bootstrap.sh all
+      - name: Upload bootstrap configuration and toolchain evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: bootstrap-${{ matrix.os }}
+          path: |
+            build/bootstrap-qt611/CMakeCache.txt
+            build/bootstrap-qt611/CMakeFiles/CMakeOutput.log
+            build/bootstrap-qt611/CMakeFiles/CMakeError.log
+            build/bootstrap-qt611/toolchain-evidence.env
+          if-no-files-found: ignore

@@ -1,0 +1,42 @@
+# Build output and generated media: recipes/manifests are versioned, binaries are not.
+/target/
+/build/
+/out/
+/cmake-build-*/
+/CMakeUserPresets.json
+*.mp4
+*.mov
+*.mkv
+*.webm
+*.wav
+*.aac
+*.mp3
+*.pcm
+
+# Local credentials, secrets, and machine-specific configuration.
+.env
+.env.*
+!.env.example
+*.pem
+*.p12
+*.mobileprovision
+*.key
+*.keystore
+
+# Tool runtime/cache state. Durable project rules, skills, plans, and specs remain tracked.
+/.agents/cache/
+/.amazonq/cache/
+/.amazonq/session*/
+/.claude/cache/
+/.claude/projects/
+/.claude/session*/
+/.codex/cache/
+/.codex/sessions/
+/.codex/runtime/
+/.cursor/cache/
+/.cursor/state/
+/.gemini/cache/
+/.gemini/state/
+/.opencode/cache/
+/.opencode/state/
+/.superplan/runtime/

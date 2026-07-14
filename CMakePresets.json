@@ -1,0 +1,25 @@
+{
+  "version": 6,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 31,
+    "patch": 6
+  },
+  "configurePresets": [
+    {
+      "name": "bootstrap",
+      "displayName": "Pinned offline bootstrap",
+      "binaryDir": "${sourceDir}/build/bootstrap-qt611",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_FIND_PACKAGE_PREFER_CONFIG": "TRUE"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "bootstrap",
+      "configurePreset": "bootstrap"
+    }
+  ]
+}

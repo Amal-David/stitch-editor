@@ -1,0 +1,32 @@
+[rust]
+version = "1.90.0"
+components = ["clippy", "rustfmt"]
+supported_target_triples = [
+  "aarch64-apple-darwin",
+  "x86_64-apple-darwin",
+  "aarch64-pc-windows-msvc",
+  "x86_64-pc-windows-msvc",
+]
+provisioning = "CI installs host components before the offline bootstrap; this file never requests rustup targets."
+
+[cmake]
+version = "3.31.6"
+
+[qt]
+version = "6.11.1"
+native_interface = "pinned-with-Qt-build"
+
+[macos]
+minimum_os = "13"
+minimum_xcode = "15"
+minimum_sdk = "14"
+backend = "Metal"
+
+[windows]
+minimum_os = "10-1809"
+toolchain = "MSVC 2022"
+sdk = "10.0.26100.0"
+backend = "D3D11"
+
+[sqlite]
+minimum_version = "3.51.3"
