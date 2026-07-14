@@ -18,9 +18,12 @@
   executable test discovery/run is the Rust bootstrap-contract test. The Qt
   shell is compiled as an integration contract, not exercised as an editor or
   runtime-preview test.
-- This build compiles the Metal backend assertion contract. It does **not** run
-  a visible Qt window, so it is not evidence of a successful runtime Metal
-  presentation or a decoder-surface path.
+- The compiled shell was launched on the local display and remained in its Qt
+  event loop for more than five seconds until manually interrupted. Its
+  scene-graph initialization assertion would terminate on any backend other
+  than Metal, so this is a local Qt/Metal backend smoke check. It is not
+  evidence of a decoder surface, frame lease, media presentation, or editor
+  feature.
 
 ## Windows and Qt limitations
 
@@ -31,10 +34,10 @@ invoking the same offline canonical command. The command fails if it cannot
 find Visual Studio 17.x or exactly Windows SDK 10.0.26100.0, and its artifact
 captures those values before the Windows path is accepted.
 
-Likewise, local macOS evidence does not verify a Qt Metal runtime. The CI/build
-artifact must include the installed QT_ROOT_DIR-derived Qt6_DIR, CMake cache,
-and shell backend assertion result. No result here claims that a media engine,
-decoder surface, or editor feature exists.
+The hosted CI/build artifact must still include the installed
+QT_ROOT_DIR-derived Qt6_DIR, CMake cache, and shell backend assertion result.
+No result here claims that a media engine, decoder surface, or editor feature
+exists.
 
 ## CI action provenance (verified 2026-07-14)
 
