@@ -2,6 +2,8 @@
 
 ## Local macOS evidence (2026-07-14)
 
+- Foundation commit `0b930c5e3ac09b5f20b1f23d18b61d54c8e6c0a4` was checked out detached into a new Git worktree. The canonical command passed there and `git status --short` remained empty after the build; generated Rust/CMake output stayed ignored.
+
 - `rustc 1.90.0`, `cargo 1.90.0`, `cmake 3.31.6`, Xcode 26.4.1, and macOS SDK
   26.4 were present. `./scripts/bootstrap.sh platform` captured these values in
   the ignored build evidence and enforced the Xcode 15+/SDK 14+ contract.
