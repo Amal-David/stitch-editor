@@ -15,3 +15,9 @@
 - Do not run repeated native-window self-tests while they visibly open, activate, or resize application windows on the user's desktop.
 - Keep the real GPU and scene-graph path, but make the default automated self-test non-activating and visually hidden; require an explicit opt-in flag for a visible diagnostic run.
 - Before interpreting repeated launch/exit churn as a current crash, inspect process state and timestamped crash reports. Stop the repetition harness first, then distinguish historical crashes from the current build.
+
+## 2026-07-16: Fix platform ownership failures before rerunning CI
+
+- When hosted Windows tests fail around SQLite maintenance, identify the exact filesystem operation before rerunning; the shared maintenance error intentionally hides the failing stage.
+- Flush a database through a write-capable file handle on Windows, and explicitly close every SQLite connection before removing its containing directory.
+- Re-run the canonical local bootstrap after the focused fix, then start one hosted run and use its retained evidence instead of retrying an unchanged commit.

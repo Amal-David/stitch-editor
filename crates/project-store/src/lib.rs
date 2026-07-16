@@ -3,7 +3,7 @@
 #![forbid(unsafe_code)]
 
 use std::ffi::OsString;
-use std::fs::{self, File};
+use std::fs::{self, File, OpenOptions};
 use std::path::{Path, PathBuf};
 use std::sync::atomic::{AtomicU64, Ordering};
 use std::sync::mpsc::{Receiver, SyncSender, sync_channel};
@@ -882,7 +882,9 @@ fn archive(state: &State, destination: &Path, fault: Option<FaultPoint>) -> Resu
     if validation.is_err() {
         return Err(StoreError::Maintenance(MaintenanceError::Archive));
     }
-    File::open(&temporary)
+    OpenOptions::new()
+        .write(true)
+        .open(&temporary)
         .and_then(|file| file.sync_all())
         .map_err(|_| StoreError::Maintenance(MaintenanceError::Archive))?;
     maintenance_fault(fault, FaultPoint::AfterArchive)?;
@@ -1231,6 +1233,7 @@ mod tests {
             .query_row("PRAGMA journal_mode", [], |row| row.get(0))
             .unwrap();
         assert!(mode.eq_ignore_ascii_case("wal"));
+        drop(connection);
         fs::remove_dir_all(directory).unwrap();
     }
 
