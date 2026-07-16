@@ -19,9 +19,13 @@ jobs:
           - os: macos-15
             compiler: apple-clang
             vcvarsall: false
+            qt_host: mac
+            qt_arch: clang_64
           - os: windows-2022
             compiler: msvc
             vcvarsall: true
+            qt_host: windows
+            qt_arch: win64_msvc2022_64
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
@@ -51,7 +55,12 @@ jobs:
         uses: jurplel/install-qt-action@48d3ad6db93f3627c8ee7a0454bc6f3744f7e730 # v4.3.1
         with:
           version: 6.11.1
+          host: ${{ matrix.qt_host }}
+          arch: ${{ matrix.qt_arch }}
           cache: false
+          # aqtinstall 3.3.0 predates Qt 6.11's split Windows repository layout.
+          # This immutable merged fix is used until a release contains PR #1000.
+          aqtsource: git+https://github.com/miurahr/aqtinstall.git@8c3695d4a4e1ceabf6a74dc6c79681656dc6b74b
       - name: Provision locked Cargo dependencies before offline bootstrap
         shell: bash
         run: cargo fetch --locked --config net.offline=false

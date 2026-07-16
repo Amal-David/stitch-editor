@@ -56,6 +56,12 @@ checkout v7.0.0 (`9c091bb...`), rust-toolchain v1 (`e97e2d...`), setup-cpp
 v1.8.1 dereferenced commit (`8170d66...`), install-qt-action v4.3.1
 (`48d3ad6...`), and upload-artifact v4.6.2 (`ea165f8...`).
 
+Qt 6.11 changed the public Windows repository layout after `aqtinstall` 3.3.0
+was released. The install action therefore pins its documented `aqtsource`
+input to immutable upstream merge commit `8c3695d...` (aqtinstall PR #1000),
+which adds the Windows x64 Qt 6.11 layout. Remove that source pin only after a
+released aqtinstall containing the same fix passes both hosted legs.
+
 CI uses `macos-15` rather than the retiring `macos-14` image. Its selected
 Xcode/macOS SDK is captured and checked against the minimum platform contract;
 Windows runs setup-cpp with `compiler: msvc` and `vcvarsall: true` before the
