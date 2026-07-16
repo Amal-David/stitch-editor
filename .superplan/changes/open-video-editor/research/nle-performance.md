@@ -310,13 +310,16 @@ WAL, `-shm`, and database are one live unit; they are never moved or copied whil
 open. SQLite documents those persistent WAL side files and the 2026 WAL-reset fix
 ([WAL documentation](https://www3.sqlite.org/wal.html)). Archive only after a
 verified checkpoint/close into a portable bundle. The durable frontier is visible:
-after a normal acknowledgement it must recover exactly; a continuing drag may lose
-only uncommitted transient position. On open, validate schema, hashes, SQLite
+a returned receipt must recover exactly; a continuing drag may lose only
+uncommitted transient position. A process death after commit but before response is
+resolved by retrying the same caller-stable `RequestId`, which returns the durable
+receipt without reapplying the command. On open, validate schema, hashes, SQLite
 integrity and command chain; replay only complete transactions; preserve the last
 good revision and present recovery choices rather than repairing silently. The
-fault matrix kills or powers off before commit, after WAL commit, during snapshot,
-checkpoint and archive; expected recovery is the last acknowledged revision, never
-a silently altered head.
+fault matrix kills or powers off before commit, after WAL commit but before response,
+during snapshot, checkpoint and archive; expected recovery is the prior head with no
+receipt before commit, or the new head plus its receipt after commit, never a silently
+altered head.
 
 Probe imports in a restricted helper process with time/size/packet/dimension
 limits. A missing asset, unsupported stream, corrupt frame, effect failure, or
@@ -407,7 +410,7 @@ this follows the sensible reporting/repetition guidance in
 | Proxy/cache | generation throughput, disk/RAM/VRAM, hit rate, invalidation | proxy parent/profile/map digest matches; capability path recorded; final export uses original |
 | Memory/backpressure | owned-resource budget, process RSS/GPU observation, allocation count, max queue bytes, cancellation debt | every queue/token stays within configured bound; no orphaned work |
 | A/V sync | worst/mean marker offset and long-run drift | offline sample marker exact; preview drift <=5 ms over 10 min after calibrated device offset |
-| Recovery | kill at deterministic write/compact/export points; recovery time/lost committed commands | zero corrupt project; exact last durable revision; never a silently altered timeline |
+| Recovery | kill at deterministic write/compact/export points; recovery time/receipt resolution | zero corrupt project; pre-commit prior head or post-commit new head plus idempotent receipt; never a silently altered timeline |
 
 CPU reference oracles use raw linear frames/audio generated from the canonical
 graph and exact hashes where integer/pure operations permit. For floating GPU
@@ -472,7 +475,7 @@ rate/VFR adapter tests pass; no stale seek result is presented; semantic plan an
 semantic mix digests match between preview/export; the independent `oracle-lock`
 verifier accepts mandatory QHD and 3K AVC/AAC exports on every acceptance machine;
 missing/corrupt media does not crash or silently relink; and every injected crash
-recovers the last durably acknowledged command.
+preserves the idempotent receipt protocol, including commit-before-response ambiguity.
 
 Before hardware baselines exist, performance acceptance must test architecture,
 not pretend to certify workstation speed. A checked-in baseline-machine manifest

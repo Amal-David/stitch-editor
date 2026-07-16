@@ -1,16 +1,13 @@
 [package]
-name = "stitch-editor-core"
+name = "stitch-project-store"
 version = "0.1.0"
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
 
 [dependencies]
+rusqlite = { version = "=0.40.1", default-features = false, features = ["backup", "bundled"] }
 stitch-editor-contracts = { path = "../contracts" }
 
-[lints.rust]
-unsafe_code = "forbid"
-
-[lints.clippy]
-all = { level = "deny", priority = -1 }
-pedantic = { level = "deny", priority = -1 }
+[lints]
+workspace = true

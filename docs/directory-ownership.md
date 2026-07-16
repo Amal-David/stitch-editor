@@ -13,8 +13,8 @@ or package manager.
 | `desktop/qt/` | T-0009 | Qt windows, input, DPI/accessibility, and render-thread shell contract. |
 | `native/macos/` | T-0010 | Objective-C++ AVFoundation/VideoToolbox/CoreVideo/Metal bridge. |
 | `native/windows/` | T-0011 | C++ Media Foundation/D3D11/COM bridge. |
-| `tools/fixtures/` and `tools/oracles/` | T-0008 | Fixture recipes, manifests, independent oracle tools, and corpus data; never generated media binaries. |
-| `benchmarks/` | T-0014 | Reproducible harnesses and retained raw evidence metadata. |
+| `tools/fixtures/`, `tools/oracles/`, and `tools/benchmark-harness/` | T-0008 | Fixture recipes, manifests, independent oracle tools, reusable run scheduling/trace/disclosure validation, and corpus data; never generated media binaries or retained benchmark claims. |
+| `benchmarks/` | T-0014 | Acceptance presets and retained raw evidence produced through the T-0008 harness. |
 | `packaging/` | T-0014 | Signed/notarized package definitions, SBOM manifests, and clean-machine checks. |
 | `docs/`, `scripts/`, `toolchains/`, root build files | T-0015 | Shared policy, toolchain, CI, and bootstrap contract. |
 | `.superplan/changes/` | Architecture council | Durable plans, specifications, research, and tasks. Never edit `.superplan/runtime/`. |

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-readonly required_rust="1.90.0"
+readonly required_rust="1.97.0"
 readonly required_cmake="3.31.6"
 readonly required_qt="6.11.1"
 readonly evidence_dir="build/bootstrap-qt611"
@@ -97,6 +97,32 @@ resolve_qt6_dir() {
   fail "Qt $required_qt is not configured. This bootstrap never downloads Qt; set Qt6_DIR to lib/cmake/Qt6 or provision QT_ROOT_DIR with the pinned Qt kit."
 }
 
+append_cmake_evidence() {
+  local cache="$evidence_dir/CMakeCache.txt"
+  [[ -f "$cache" ]] || fail "CMake did not produce $cache."
+
+  local compiler generator backend backend_definition
+  compiler="$(awk -F= '/^CMAKE_CXX_COMPILER:FILEPATH=/ {print $2; exit}' "$cache")"
+  generator="$(awk -F= '/^CMAKE_GENERATOR:INTERNAL=/ {print $2; exit}' "$cache")"
+  [[ -n "$compiler" ]] || fail "CMake cache did not record the C++ compiler."
+  [[ -n "$generator" ]] || fail "CMake cache did not record the generator."
+
+  if [[ "$(uname -s)" == "Darwin" ]]; then
+    backend="Metal"
+    backend_definition="STITCH_EXPECT_METAL=1"
+  else
+    backend="D3D11"
+    backend_definition="STITCH_EXPECT_D3D11=1"
+  fi
+
+  {
+    printf 'cmake_cxx_compiler=%s\n' "$compiler"
+    printf 'cmake_generator=%s\n' "$generator"
+    printf 'required_qt_backend=%s\n' "$backend"
+    printf 'backend_compile_definition=%s\n' "$backend_definition"
+  } >>"$evidence_dir/toolchain-evidence.env"
+}
+
 run_policy() {
   ./scripts/policy.sh
 }
@@ -108,8 +134,8 @@ run_rust() {
   require_command clippy-driver
   require_exact_version "rustc" "$required_rust" "$(rustc --version | awk '{print $2}')"
   cargo fmt --all -- --check
-  cargo clippy --workspace --all-targets --offline -- -D warnings
-  cargo test --workspace --offline
+  cargo clippy --workspace --all-targets --locked --offline -- -D warnings
+  cargo test --workspace --locked --offline
 }
 
 run_qt() {
@@ -135,8 +161,12 @@ run_qt() {
     done
   fi
   cmake "${cmake_args[@]}"
-  cmake --build --preset bootstrap
-  ctest --test-dir build/bootstrap-qt611 --output-on-failure
+  append_cmake_evidence
+  require_command tee
+  cmake --build --preset bootstrap --verbose 2>&1 \
+    | tee "$evidence_dir/cmake-build.log"
+  ctest --test-dir build/bootstrap-qt611 --output-on-failure \
+    --output-log "$evidence_dir/ctest.log"
 }
 
 case "$phase" in

@@ -14,7 +14,7 @@ The slice is a signed, installable macOS and Windows desktop editor that can:
 3. split, trim, ripple-move, stitch, and reorder clips;
 4. apply transform, opacity, a 12-frame dissolve, a video fade, one deterministic color effect, clip gain, gain keyframes, and an equal-power audio crossfade;
 5. seek, scrub, and play through the shared render graph while proxy and thumbnail work is saturated;
-6. save, reopen, undo/redo, autosave, and recover the last acknowledged edit after injected crashes; and
+6. save, reopen, undo/redo, autosave, and resolve injected-crash recovery through durable idempotent command receipts; and
 7. export QHD and 3K Rec.709 SDR deliverables whose decoded video, audio, timestamps, duration, and metadata pass independent oracles.
 
 Anything beyond this list is out of scope for the slice. In particular: arbitrary third-party plugins, HDR, RAW, nested sequences, collaboration, AI features, and a universal container/codec matrix.
@@ -70,7 +70,7 @@ The slice fails if any requirement below is skipped:
 - preview and export produce the same `semantic_plan_digest` and `semantic_mix_digest` for the same revision/range; each emits its distinct complete `execution_plan_digest`;
 - decoded export has the expected frame/sample count, monotonic PTS, duration, sync markers, color metadata, and independent visual/audio comparison result;
 - missing, moved, corrupt, and unsupported media produce deterministic diagnostics without crash, silent relink, effect omission, or asset substitution;
-- crash injection before commit, after WAL commit, during snapshot, during checkpoint, and during archive recovers the exact last durably acknowledged command and never a partially applied or silently altered edit;
+- crash injection before commit, after WAL commit but before response, during snapshot, during checkpoint, and during archive proves the idempotent receipt protocol: pre-commit failure leaves the prior head and no receipt; post-commit ambiguity retains the new head and receipt, and retrying the same `RequestId` returns it without reapplying; no returned receipt is lost and no edit is partially applied or silently altered;
 - decoder NV12/P010 planes reach a native Metal/D3D11 color/effect pass, validated 2D RGBA texture, and Qt render-thread import through a bridge-owned frame lease with zero steady-state GPU-to-CPU frame transfers; every transfer is counted and traced;
 - the real-time audio callback performs zero locks, allocations, disk I/O, waits, or logging calls; and
 - signed packages install on clean machines, open the same fixture project, export it, and preserve its canonical hash.
@@ -92,7 +92,7 @@ These gates test architecture on the named baseline machines; they are not unive
 | Memory | checked-in machine-specific editor-owned CPU-frame, GPU-texture, decoder, queue, and cache byte budgets are never exceeded; tracked editor-owned retention grows <= 2% after a second identical run; process RSS and GPU-process/unified memory remain required observations |
 | Backpressure | every queue has a configured byte and item limit; observed maxima stay within it and producers coalesce or wait when full |
 | Zero-copy | zero steady-state GPU-to-CPU readbacks in the native preview path after warm-up |
-| Reliability | zero project corruption and zero lost acknowledged commands across all scripted crash points |
+| Reliability | zero project corruption, zero lost returned receipts, and idempotent resolution of every commit-before-response ambiguity across all scripted crash points |
 
 Cold/warm open time, QHD/3K long-GOP seek p50/p95/p99, cancellation latency, 3K original-media throughput, proxy generation speed, export real-time factor, CPU/GPU utilization, power, RSS/VRAM, cache hit rate, and package size are mandatory measurements but not release thresholds until results exist on at least two representative machines per operating system.
 

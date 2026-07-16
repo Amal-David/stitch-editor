@@ -1,0 +1,17 @@
+[package]
+name = "stitch-c-abi"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[lib]
+name = "stitch_c_abi"
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+stitch-editor-contracts = { path = "../../../crates/contracts" }
+stitch-editor-core = { path = "../../../crates/editor-core" }
+
+[lints]
+workspace = true

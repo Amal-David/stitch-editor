@@ -4,7 +4,7 @@
 
 - Foundation commit `0b930c5e3ac09b5f20b1f23d18b61d54c8e6c0a4` was checked out detached into a new Git worktree. The canonical command passed there and `git status --short` remained empty after the build; generated Rust/CMake output stayed ignored.
 
-- `rustc 1.90.0`, `cargo 1.90.0`, `cmake 3.31.6`, Xcode 26.4.1, and macOS SDK
+- `rustc 1.97.0`, `cargo 1.97.0`, `cmake 3.31.6`, Xcode 26.4.1, and macOS SDK
   26.4 were present. `./scripts/bootstrap.sh platform` captured these values in
   the ignored build evidence and enforced the Xcode 15+/SDK 14+ contract.
 - `./scripts/policy.sh` passed.
@@ -38,6 +38,15 @@ The hosted CI/build artifact must still include the installed
 QT_ROOT_DIR-derived Qt6_DIR, CMake cache, and shell backend assertion result.
 No result here claims that a media engine, decoder surface, or editor feature
 exists.
+
+## Automated shell self-test presentation
+
+`stitch_editor_shell --self-test` is visually hidden but not headless: it keeps
+the real native window, Metal swapchain, and Qt scene graph needed by the gate,
+while setting the window fully transparent and unable to accept focus. The
+self-test also makes the native window transparent to input and fails if it
+becomes active or focused. Use `--self-test-visible` only for an intentional
+visual diagnostic run.
 
 ## CI action provenance (verified 2026-07-14)
 

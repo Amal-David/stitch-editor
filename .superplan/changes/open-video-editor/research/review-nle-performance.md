@@ -107,10 +107,14 @@ current fixed versions for the 2026 WAL-reset bug
 - Persist the database, `-wal`, and `-shm` as one live unit; archive only after
   verified checkpoint/close. One persistence worker owns writes and compaction;
   compaction is a cancel-safe transaction, never an in-place file replacement.
-- Crash tests cut power/kill before commit, after WAL commit, during snapshot,
-  during checkpoint, and during archive. The only acceptable recovery is the
-  last acknowledged revision or a prior acknowledged revision accompanied by a
-  durable-storage failure diagnostic; never a silently altered head.
+- Crash tests cut power/kill before commit, after WAL commit but before response,
+  during snapshot, during checkpoint, and during archive. Pre-commit failure must
+  leave the prior head with no receipt. Post-commit ambiguity must retain the new
+  head and durable receipt so retrying the same caller-stable `RequestId` returns
+  it without applying the command twice. A returned receipt is never silently
+  lost and the head is never silently altered. Physical power-loss claims remain
+  conditional on the operating system, VFS, filesystem, and device honoring sync
+  semantics; process-kill tests alone do not prove arbitrary hardware behavior.
 
 ### P1 — The fixture matrix currently conflicts with the declared codec scope
 
@@ -232,4 +236,3 @@ independent decode/container parse. Store failed frames/audio windows/traces.
   performance wording is: "On this disclosed machine and configuration, this
   build achieved this metric under this fixture." "Most efficient," "fastest,"
   and cross-editor percentage claims remain unsupported.
-
