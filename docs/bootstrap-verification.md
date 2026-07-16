@@ -14,9 +14,8 @@
   Homebrew split `CMAKE_PREFIX_PATH`, `./scripts/bootstrap.sh all` passed its
   policy, Rust, CMake configure, Qt shell build, and CTest phases without a
   download. The captured Qt6_DIR is the local Qt Base package path.
-- CTest reported “No tests were found.” That is expected at T-0015: the only
-  executable test discovery/run is the Rust bootstrap-contract test. The Qt
-  shell is compiled as an integration contract, not exercised as an editor or
+- CTest passed the linked `stitch_c_abi_lifecycle_test` (1/1). The Qt shell is
+  compiled as an integration contract, not exercised as an editor or
   runtime-preview test.
 - The compiled shell was launched on the local display and remained in its Qt
   event loop for more than five seconds until manually interrupted. Its
@@ -25,19 +24,30 @@
   evidence of a decoder surface, frame lease, media presentation, or editor
   feature.
 
-## Windows and Qt limitations
+## Hosted macOS and Windows evidence (2026-07-16)
 
-Windows/MSVC 2022, the exact Windows SDK 10.0.26100.0, Qt 6.11.1, and actual
-D3D11 runtime verification were not available in this local macOS workspace.
-The Windows CI job provisions the pinned Rust components, CMake, and Qt before
-invoking the same offline canonical command. The command fails if it cannot
-find Visual Studio 17.x or exactly Windows SDK 10.0.26100.0, and its artifact
-captures those values before the Windows path is accepted.
+[Bootstrap run 29491779087](https://github.com/Amal-David/stitch-editor/actions/runs/29491779087)
+passed from clean checkouts of commit
+`e83bbadb5cd8d008ae50bcbd85d8a1e4ab11a38a` on both declared runners:
 
-The hosted CI/build artifact must still include the installed
-QT_ROOT_DIR-derived Qt6_DIR, CMake cache, and shell backend assertion result.
-No result here claims that a media engine, decoder surface, or editor feature
-exists.
+- The [macOS job](https://github.com/Amal-David/stitch-editor/actions/runs/29491779087/job/87599364276)
+  used the `macos15` image `20260715.0234.1`, Xcode 16.4, macOS SDK 15.5,
+  Qt 6.11.1, and AppleClang 17.0.0.17000013. Its verbose build log contains
+  `STITCH_EXPECT_METAL=1`, and CTest passed the linked C ABI test (1/1).
+- The [Windows job](https://github.com/Amal-David/stitch-editor/actions/runs/29491779087/job/87599364271)
+  used the `win22` image `20260706.237.1`, Visual Studio 17.14.37411.7,
+  Windows SDK 10.0.26100.0, Qt 6.11.1, and MSVC 19.44.35228.0. Its verbose
+  build log contains `STITCH_EXPECT_D3D11=1`, and configuration-aware CTest
+  passed the linked C ABI test (1/1).
+- Uploaded artifacts `bootstrap-macos-15` and `bootstrap-windows-2022` retain
+  the runner/toolchain evidence, resolved Qt and compiler paths, CMake cache
+  and compiler state, verbose build log, and CTest logs.
+
+Network-dependent action and dependency provisioning occurs before the
+canonical command. `./scripts/bootstrap.sh all` uses locked, offline Cargo
+operations and contains no Qt or CMake download path. This is compile/link and
+C ABI lifecycle evidence; it does not claim Windows GUI launch, runtime D3D11
+presentation, a media engine, a decoder surface, or an editor feature.
 
 ## Automated shell self-test presentation
 
