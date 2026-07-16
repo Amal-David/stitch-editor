@@ -3,7 +3,7 @@
 #![forbid(unsafe_code)]
 
 use std::ffi::OsString;
-use std::fs::{self, File, OpenOptions};
+use std::fs::{self, OpenOptions};
 use std::path::{Path, PathBuf};
 use std::sync::atomic::{AtomicU64, Ordering};
 use std::sync::mpsc::{Receiver, SyncSender, sync_channel};
@@ -900,7 +900,7 @@ fn sync_archive_parent(destination: &Path) -> Result<(), StoreError> {
         let parent = destination
             .parent()
             .ok_or(StoreError::Maintenance(MaintenanceError::Archive))?;
-        File::open(parent)
+        fs::File::open(parent)
             .and_then(|directory| directory.sync_all())
             .map_err(|_| StoreError::Maintenance(MaintenanceError::Archive))?;
     }
