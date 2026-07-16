@@ -903,7 +903,13 @@ fn sync_archive_parent(destination: &Path) -> Result<(), StoreError> {
             .map_err(|_| StoreError::Maintenance(MaintenanceError::Archive))?;
     }
     #[cfg(not(unix))]
-    let _ = destination;
+    {
+        // Windows does not expose a portable directory fsync through std, but
+        // the archive contract still rejects a destination without a parent.
+        let _ = destination
+            .parent()
+            .ok_or(StoreError::Maintenance(MaintenanceError::Archive))?;
+    }
     Ok(())
 }
 
