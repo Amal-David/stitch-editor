@@ -88,6 +88,7 @@ jobs:
           name: bootstrap-${{ matrix.os }}
           path: |
             build/bootstrap-qt611/CMakeCache.txt
+            build/bootstrap-qt611/CMakeFiles/*/CMakeCXXCompiler.cmake
             build/bootstrap-qt611/CMakeFiles/CMakeConfigureLog.yaml
             build/bootstrap-qt611/cmake-build.log
             build/bootstrap-qt611/Testing/Temporary/LastTest.log

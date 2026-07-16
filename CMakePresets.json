@@ -19,7 +19,8 @@
   "buildPresets": [
     {
       "name": "bootstrap",
-      "configurePreset": "bootstrap"
+      "configurePreset": "bootstrap",
+      "configuration": "Debug"
     }
   ]
 }

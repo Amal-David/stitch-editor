@@ -101,10 +101,20 @@ append_cmake_evidence() {
   local cache="$evidence_dir/CMakeCache.txt"
   [[ -f "$cache" ]] || fail "CMake did not produce $cache."
 
-  local compiler generator backend backend_definition
-  compiler="$(awk -F= '/^CMAKE_CXX_COMPILER:FILEPATH=/ {print $2; exit}' "$cache")"
+  local compiler generator backend backend_definition compiler_id compiler_version compiler_state
+  local compiler_states=()
+  shopt -s nullglob
+  compiler_states=("$evidence_dir"/CMakeFiles/*/CMakeCXXCompiler.cmake)
+  shopt -u nullglob
+  [[ "${#compiler_states[@]}" -eq 1 ]] || fail "CMake did not produce exactly one C++ compiler state file."
+  compiler_state="${compiler_states[0]}"
+  compiler="$(awk -F'"' '/^set\(CMAKE_CXX_COMPILER "/ {print $2; exit}' "$compiler_state")"
+  compiler_id="$(awk -F'"' '/^set\(CMAKE_CXX_COMPILER_ID "/ {print $2; exit}' "$compiler_state")"
+  compiler_version="$(awk -F'"' '/^set\(CMAKE_CXX_COMPILER_VERSION "/ {print $2; exit}' "$compiler_state")"
   generator="$(awk -F= '/^CMAKE_GENERATOR:INTERNAL=/ {print $2; exit}' "$cache")"
-  [[ -n "$compiler" ]] || fail "CMake cache did not record the C++ compiler."
+  [[ -n "$compiler" ]] || fail "CMake compiler state did not record the C++ compiler."
+  [[ -n "$compiler_id" ]] || fail "CMake compiler state did not record the C++ compiler ID."
+  [[ -n "$compiler_version" ]] || fail "CMake compiler state did not record the C++ compiler version."
   [[ -n "$generator" ]] || fail "CMake cache did not record the generator."
 
   if [[ "$(uname -s)" == "Darwin" ]]; then
@@ -117,6 +127,8 @@ append_cmake_evidence() {
 
   {
     printf 'cmake_cxx_compiler=%s\n' "$compiler"
+    printf 'cmake_cxx_compiler_id=%s\n' "$compiler_id"
+    printf 'cmake_cxx_compiler_version=%s\n' "$compiler_version"
     printf 'cmake_generator=%s\n' "$generator"
     printf 'required_qt_backend=%s\n' "$backend"
     printf 'backend_compile_definition=%s\n' "$backend_definition"
@@ -165,7 +177,7 @@ run_qt() {
   require_command tee
   cmake --build --preset bootstrap --verbose 2>&1 \
     | tee "$evidence_dir/cmake-build.log"
-  ctest --test-dir build/bootstrap-qt611 --output-on-failure \
+  ctest --test-dir build/bootstrap-qt611 --build-config Debug --output-on-failure \
     --output-log "$evidence_dir/ctest.log"
 }
 
