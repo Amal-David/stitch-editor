@@ -67,3 +67,10 @@ Xcode/macOS SDK is captured and checked against the minimum platform contract;
 Windows runs setup-cpp with `compiler: msvc` and `vcvarsall: true` before the
 offline bootstrap captures and validates Visual Studio 17.x and Windows SDK
 10.0.26100.0.
+
+The Windows job resolves `link.exe` from the activated Visual Studio tree and
+exports that absolute path through Cargo's target-specific linker variable.
+This prevents Git Bash's unrelated `/usr/bin/link.exe` from shadowing the MSVC
+linker. The dependency policy uses `rg` when available and a tracked-file
+`git grep` fallback otherwise, so a missing optional search binary cannot turn
+failed checks into a misleading policy success.
