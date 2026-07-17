@@ -14,6 +14,11 @@ grep -Fq "GNU GENERAL PUBLIC LICENSE" LICENSE || fail "LICENSE is not GPL-3.0 te
 grep -Fq "Qt 6.11.1" docs/toolchains.md || fail "Qt 6.11.1 is not pinned"
 grep -Fq "not completed legal advice" LEGAL_GATE.md || fail "legal gate must remain explicitly incomplete"
 
+if git ls-files --cached --others --exclude-standard |
+  grep -E -i '\.(mp4|mov|m4a|aac|h264|264|hevc|av1|webm)$'; then
+  fail "encoded media artifact found; generated codec fixtures must remain local until the legal gate approves distribution"
+fi
+
 forbidden='ffmpeg|nodeav|libavcodec|libavformat|bundled[[:space:]-]*codec'
 if command -v rg >/dev/null 2>&1; then
   if rg -n -i \

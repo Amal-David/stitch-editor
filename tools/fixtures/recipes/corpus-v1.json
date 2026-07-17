@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "generator_identity": "stitch-fixtures-rust-v1",
+  "license": "CC0-1.0 source recipe and generated truth; encoded artifacts are external controlled outputs",
+  "encoded_artifacts": "not committed; generation records an external artifact_sha256 alongside this immutable recipe",
+  "shared_audio": {
+    "codec": "AAC-LC",
+    "channels": 2,
+    "sample_rate_hz": 48000,
+    "mandatory_bitrate_bps": 192000,
+    "optional_capability_bitrate_bps": 320000,
+    "companion_wav": "lossless PCM, 32-bit little-endian, 48000 Hz stereo"
+  },
+  "shared_color": "Rec.709/sRGB/BT.709/full-range-RGB-source",
+  "markers": [
+    { "name": "flash-chirp-0001", "pts": { "numerator": 1, "denominator": 1 }, "kind": "flash-and-chirp" },
+    { "name": "flash-chirp-0007", "pts": { "numerator": 7, "denominator": 1 }, "kind": "flash-and-chirp" },
+    { "name": "flash-chirp-0013", "pts": { "numerator": 13, "denominator": 1 }, "kind": "flash-and-chirp" },
+    { "name": "flash-chirp-0019", "pts": { "numerator": 19, "denominator": 1 }, "kind": "flash-and-chirp" },
+    { "name": "flash-chirp-0025", "pts": { "numerator": 25, "denominator": 1 }, "kind": "flash-and-chirp" },
+    { "name": "single-sample-impulse", "pts": { "numerator": 29999, "denominator": 1000 }, "kind": "single-sample-impulse" }
+  ],
+  "marker_schedule": {
+    "flash_chirp_window_seconds": 30,
+    "flash_chirp_offsets_seconds": [1, 7, 13, 19, 25],
+    "single_sample_impulse_pts": { "numerator": 29999, "denominator": 1000 },
+    "end_guard_pts": "corpus_duration - 1/48000 seconds",
+    "signal_contract": "each marker produces a visible top-left ROI flash and a deterministic 48 kHz chirp or single-sample impulse"
+  },
+  "fixtures": [
+    {
+      "fixture_id": "QHD-I",
+      "width": 2560,
+      "height": 1440,
+      "pixel_aspect_ratio": { "numerator": 1, "denominator": 1 },
+      "frame_rate": { "numerator": 30, "denominator": 1 },
+      "codec": { "video_codec": "AVC/H.264", "profile": "High", "level": "5.1", "chroma": "8-bit 4:2:0", "video_bitrate_bps": 20000000, "gop": "closed all-IDR; every frame random-access", "timescale": 90000, "sample_entry": "avc1 + mp4a", "encoder_delay_samples": 0, "encoder_padding_samples": 0, "encoder_identity": "unselected-platform-encoder" },
+      "corpora": [
+        { "name": "development", "duration": { "numerator": 30, "denominator": 1 }, "semantic_sha256": "e61778a96280d2178a4ec0cb0437d5c362e69f2825b090430de4d886ebdf63c5", "artifact_sha256": null },
+        { "name": "release", "duration": { "numerator": 600, "denominator": 1 }, "semantic_sha256": "f7905278ca088033b01f6f194678137a6d1fb243e5fc7a16ff62067a58169632", "artifact_sha256": null }
+      ]
+    },
+    {
+      "fixture_id": "QHD-LGOP",
+      "width": 2560,
+      "height": 1440,
+      "pixel_aspect_ratio": { "numerator": 1, "denominator": 1 },
+      "frame_rate": { "numerator": 60, "denominator": 1 },
+      "codec": { "video_codec": "AVC/H.264", "profile": "High", "level": "5.1", "chroma": "8-bit 4:2:0", "video_bitrate_bps": 28000000, "gop": "closed 60-frame GOP; IDR at each GOP boundary", "timescale": 90000, "sample_entry": "avc1 + mp4a", "encoder_delay_samples": 0, "encoder_padding_samples": 0, "encoder_identity": "unselected-platform-encoder" },
+      "corpora": [
+        { "name": "development", "duration": { "numerator": 30, "denominator": 1 }, "semantic_sha256": "4d8292e561402c77c8f6908375883072e0202af50b30de031fec63d463e0e918", "artifact_sha256": null },
+        { "name": "release", "duration": { "numerator": 600, "denominator": 1 }, "semantic_sha256": "a7c08e954750be64940cc2fca76f3dc82cae908faa45822930f0d2c29bf6b021", "artifact_sha256": null }
+      ]
+    },
+    {
+      "fixture_id": "3K-I",
+      "width": 3072,
+      "height": 1728,
+      "pixel_aspect_ratio": { "numerator": 1, "denominator": 1 },
+      "frame_rate": { "numerator": 30, "denominator": 1 },
+      "codec": { "video_codec": "AVC/H.264", "profile": "High", "level": "5.2", "chroma": "8-bit 4:2:0", "video_bitrate_bps": 30000000, "gop": "closed all-IDR; every frame random-access", "timescale": 90000, "sample_entry": "avc1 + mp4a", "encoder_delay_samples": 0, "encoder_padding_samples": 0, "encoder_identity": "unselected-platform-encoder" },
+      "corpora": [
+        { "name": "development", "duration": { "numerator": 30, "denominator": 1 }, "semantic_sha256": "3e71d6828f405cb270553abed73370b7671e384853850f946867fb0f0cb980ee", "artifact_sha256": null },
+        { "name": "release", "duration": { "numerator": 600, "denominator": 1 }, "semantic_sha256": "10e5ebb3d2d4bf34f2e88ffb1c61ac0031032b30a5742d32fd95cdf92e0bebb5", "artifact_sha256": null }
+      ]
+    },
+    {
+      "fixture_id": "3K-LGOP",
+      "capability_variant": true,
+      "width": 3072,
+      "height": 1728,
+      "pixel_aspect_ratio": { "numerator": 1, "denominator": 1 },
+      "frame_rate": { "numerator": 60, "denominator": 1 },
+      "codec": { "video_codec": "HEVC Main or AV1 Main capability variant", "profile": "Main", "level": "capability-reported", "chroma": "8-bit 4:2:0", "video_bitrate_bps": 36000000, "gop": "closed 60-frame GOP; capability-reported random access", "timescale": 90000, "sample_entry": "capability-reported", "encoder_delay_samples": 0, "encoder_padding_samples": 0, "encoder_identity": "unselected-platform-encoder" },
+      "corpora": [
+        { "name": "development", "duration": { "numerator": 30, "denominator": 1 }, "semantic_sha256": "0a0e5ba753ee41b62e043a9a8856c396ec4218302752fbf2deadba74849eb282", "artifact_sha256": null },
+        { "name": "release", "duration": { "numerator": 600, "denominator": 1 }, "semantic_sha256": "4244290ab944f83594784124df634131b22a47a2e3244cf9ef6a4336bdb7abfa", "artifact_sha256": null }
+      ]
+    },
+    {
+      "fixture_id": "VFR-AV",
+      "width": 2560,
+      "height": 1440,
+      "pixel_aspect_ratio": { "numerator": 1, "denominator": 1 },
+      "vfr_frame_durations": [
+        { "numerator": 1, "denominator": 24 },
+        { "numerator": 1, "denominator": 30 }
+      ],
+      "codec": { "video_codec": "AVC/H.264", "profile": "High", "level": "5.1", "chroma": "8-bit 4:2:0", "video_bitrate_bps": 20000000, "gop": "closed 30-frame GOP; exact per-frame PTS retained", "timescale": 90000, "sample_entry": "avc1 + mp4a", "encoder_delay_samples": 0, "encoder_padding_samples": 0, "encoder_identity": "unselected-platform-encoder" },
+      "corpora": [
+        { "name": "development", "duration": { "numerator": 30, "denominator": 1 }, "semantic_sha256": "e7e653f9435cd8930eaab04166c9d8e1434f5ba36a793755e3c9d318349104df", "artifact_sha256": null },
+        { "name": "release", "duration": { "numerator": 600, "denominator": 1 }, "semantic_sha256": "9780ce9eb5b1fc39e61e19c96ce7a2beaf85cb0f8aa1d34e2d31fdc42f8d37fc", "artifact_sha256": null }
+      ]
+    }
+  ]
+}

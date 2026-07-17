@@ -49,3 +49,20 @@ The round completed with three independent **REVISE, not reopen** verdicts:
 | `/root/nle_model_benchmarks` | `review-nle-performance.md` | `nle-performance.md` |
 
 Fresh authoritative queries after the review/revision turns still record all three thread IDs as `gpt-5.6-terra`, `high`, and `subagent`. Their material objections were reconciled into ADR-001, the vertical-slice contract, the 16-task dependency graph, task contracts, program plan, decision log, and project lessons. The architecture remains selected for falsification; it is not performance-certified.
+
+## T-0008 research and implementation council
+
+The fixture/oracle milestone used fresh bounded workers. Each was attested in
+the authoritative `threads` table immediately after dispatch and before its
+material output was accepted:
+
+| Agent path | Thread ID | Assignment | Model | Reasoning effort | Thread source |
+| --- | --- | --- | --- | --- | --- |
+| `/root/fixture_oracle_research` | `019f7159-1724-7ea3-a28c-9915d90e86b9` | Primary-source fixture/oracle architecture research | `gpt-5.6-terra` | `high` | `subagent` |
+| `/root/fixtures_oracles_impl` | `019f715b-0718-7992-ba20-22f9f864ca3f` | Deterministic fixture and independent oracle implementation | `gpt-5.6-terra` | `high` | `subagent` |
+| `/root/benchmark_harness_impl` | `019f715b-87c4-7572-821f-198ae763c53d` | Benchmark schedule, disclosure, trace, and regression implementation | `gpt-5.6-terra` | `high` | `subagent` |
+
+The implementation workers have exclusive, non-overlapping write ownership:
+`tools/fixtures/**` plus `tools/oracles/**`, and
+`tools/benchmark-harness/**`, respectively. The parent owns shared workspace,
+policy, specification, and integration files.

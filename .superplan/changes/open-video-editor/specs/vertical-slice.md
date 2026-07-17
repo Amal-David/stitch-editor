@@ -25,13 +25,13 @@ The repository will contain generator source, recipes, manifests, expected seman
 
 | ID | Source | Required role |
 | --- | --- | --- |
-| `QHD-I` | 2560x1440, 30 fps CFR, AVC/H.264 all-IDR, 8-bit 4:2:0, Rec.709 SDR, AAC-LC 48 kHz stereo in MP4; companion lossless WAV oracle | edit-friendly 2K-class original-media playback and export |
-| `QHD-LGOP` | 2560x1440, 60 fps CFR, AVC/H.264 long-GOP, 8-bit 4:2:0, Rec.709 SDR, AAC 48 kHz stereo in MP4 | random-access, cancellation, and hardware-path measurement |
-| `3K-I` | 3072x1728, 30 fps CFR, AVC/H.264 all-IDR, 8-bit 4:2:0, Rec.709 SDR, AAC-LC 48 kHz stereo in MP4; companion lossless WAV oracle | 3K ingest, proxy generation, playback, and export correctness |
+| `QHD-I` | 2560x1440, 30 fps CFR, AVC/H.264 all-IDR, 8-bit 4:2:0, Rec.709 SDR, AAC-LC 48 kHz stereo at the mandatory 192 kb/s baseline in MP4; companion lossless WAV oracle | edit-friendly 2K-class original-media playback and export |
+| `QHD-LGOP` | 2560x1440, 60 fps CFR, AVC/H.264 long-GOP, 8-bit 4:2:0, Rec.709 SDR, AAC-LC 48 kHz stereo at the mandatory 192 kb/s baseline in MP4 | random-access, cancellation, and hardware-path measurement |
+| `3K-I` | 3072x1728, 30 fps CFR, AVC/H.264 all-IDR, 8-bit 4:2:0, Rec.709 SDR, AAC-LC 48 kHz stereo at the mandatory 192 kb/s baseline in MP4; companion lossless WAV oracle | 3K ingest, proxy generation, playback, and export correctness |
 | `3K-LGOP` | 3072x1728, 60 fps CFR, HEVC Main or AV1 Main as separately reported variants, 8/10-bit 4:2:0, Rec.709 SDR, AAC/Opus 48 kHz stereo | capability probe and measured baseline; not a release performance gate |
-| `VFR-AV` | 2560x1440 AVC/H.264 in MP4 with alternating exact PTS/durations, AAC-LC 48 kHz stereo, companion lossless WAV, and numbered flash/chirp/single-sample markers | exact-time, VFR, resampling, and A/V-sync oracle |
+| `VFR-AV` | 2560x1440 AVC/H.264 in MP4 with alternating exact PTS/durations, AAC-LC 48 kHz stereo at the mandatory 192 kb/s baseline, companion lossless WAV, and numbered flash/chirp/single-sample markers | exact-time, VFR, resampling, and A/V-sync oracle |
 
-Every baseline manifest pins AVC profile/level, chroma, bitrate, GOP structure, closed-GOP/random-access flags, AAC encoder delay/padding, container timescale, sample entry/configuration, exact artifact hash, and decoded-semantic oracle. Every fixture contains deterministic frame numbers, exact rational timestamps, moving detail, gradients, color bars, hard cuts, dissolve boundaries, and audio chirp/impulse markers. Unsupported optional variants must return a typed capability result; they must not be silently transcoded or decoded through an undisclosed backend.
+Every baseline manifest pins AVC profile/level, chroma, bitrate, GOP structure, closed-GOP/random-access flags, the mandatory 192 kb/s AAC setting, AAC encoder delay/padding, container timescale, sample entry/configuration, exact artifact hash, and decoded-semantic oracle. Every fixture contains deterministic frame numbers, exact rational timestamps, moving detail, gradients, color bars, hard cuts, dissolve boundaries, and audio chirp/impulse markers. AAC-LC 320 kb/s is an optional capability probe and is never substituted for or pooled with the cross-platform baseline. Unsupported optional variants must return a typed capability result; they must not be silently transcoded or decoded through an undisclosed backend.
 
 The broader 10-bit 4:2:2 all-intra research fixtures remain post-slice capability probes because ADR-001 deliberately narrows the first supported format promise to system-supported 8-bit 4:2:0 AVC plus common audio.
 
@@ -41,11 +41,11 @@ The required proxy is 1280 pixels wide, square-pixel, CFR, AVC/H.264 8-bit 4:2:0
 
 ### Export profiles
 
-- `QHD-final`: 2560x1440 at 30 fps CFR, AVC/H.264 High, 8-bit 4:2:0 Rec.709 SDR, AAC-LC 48 kHz stereo at 320 kb/s, MP4 fast-start.
-- `3K-final`: 3072x1728 at 30 fps CFR, AVC/H.264, 8-bit 4:2:0 Rec.709 SDR, AAC-LC 48 kHz stereo at 320 kb/s, MP4 fast-start. This profile is required on every named acceptance machine; record the selected profile/level and hardware/software path. An unsupported result, failure to independently decode, or fallback to the lossless oracle intermediate fails the slice and reopens ADR-001.
+- `QHD-final`: 2560x1440 at 30 fps CFR, AVC/H.264 High, 8-bit 4:2:0 Rec.709 SDR, AAC-LC 48 kHz stereo at the mandatory 192 kb/s baseline, MP4 fast-start.
+- `3K-final`: 3072x1728 at 30 fps CFR, AVC/H.264, 8-bit 4:2:0 Rec.709 SDR, AAC-LC 48 kHz stereo at the mandatory 192 kb/s baseline, MP4 fast-start. This profile is required on every named acceptance machine; record the selected profile/level and hardware/software path. An unsupported result, failure to independently decode, or fallback to the lossless oracle intermediate fails the slice and reopens ADR-001.
 - `oracle`: canonical decoded linear-light RGBA frames plus 32-bit float 48 kHz audio blocks and an exact timestamp/metadata manifest. This is the correctness reference, not a user deliverable.
 
-Encoder bitrate is recorded by the harness and fixed before baseline publication. Hardware and software encode results are never pooled.
+AAC-LC 320 kb/s may be reported only as a separately probed optional profile. Encoder bitrate is recorded by the harness and fixed before baseline publication. Hardware and software encode results are never pooled.
 
 ## Canonical Project Recipe
 

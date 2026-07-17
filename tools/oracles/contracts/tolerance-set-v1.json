@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "timestamp_ticks": 0,
+  "audio_samples": 0,
+  "semantic_digest": "exact",
+  "rec709_metadata": "exact",
+  "floating_path_max_channel_error": 0,
+  "floating_path_rmse": 0
+}

@@ -11,8 +11,11 @@ basic effects without bundling FFmpeg or a browser media engine.
 > not yet a usable replacement for CapCut or Filmora, and there are no release
 > binaries. The repository currently proves the deterministic editor core,
 > durable project storage, native ABI, and a synthetic macOS Metal preview
-> boundary; real media import, decoding, audio playback, effects, export, and
-> the Windows D3D11 preview path are still being built.
+> boundary. Deterministic fixture recipes, evidence schemas, oracle checks, and
+> a reproducible benchmark scheduler now exist, but native encoded-fixture
+> generation and independent media decoding are not implemented yet. Real
+> media import, audio playback, effects, export, and the Windows D3D11 preview
+> path are still being built.
 
 ## Architecture
 
@@ -42,8 +45,18 @@ for the exact boundaries and acceptance gates.
   receipts;
 - a stable C ABI with explicit ownership, thread, epoch, and frame-lease rules;
 - a Qt Quick shell and synthetic same-device Metal preview self-test on macOS;
+- streaming QHD/3K/VFR fixture recipes with exact timestamps, duration-spanning
+  visual/audio markers, source hashes, and WAV-oracle generation;
+- isolated oracle evidence checks and a source-verifiable oracle lock;
+- deterministic cold/warm benchmark scheduling, complete disclosure schemas,
+  Perfetto-compatible trace JSON, failure retention, and paired regression
+  analysis;
 - offline policy, format, lint, unit-test, CMake, Qt, and CTest bootstrap checks;
 - pinned macOS and Windows GitHub Actions bootstrap environments.
+
+The fixture/oracle layer is still a foundation rather than end-to-end media
+evidence: generated AVC/AAC files, native capability records, independent
+BMFF/decode verification, and real benchmark-run collection remain active work.
 
 ## Build the foundation
 

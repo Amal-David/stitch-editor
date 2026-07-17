@@ -1,5 +1,5 @@
 # Build output and generated media: recipes/manifests are versioned, binaries are not.
-/target/
+**/target/
 /build/
 /out/
 /cmake-build-*/

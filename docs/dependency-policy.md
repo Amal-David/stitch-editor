@@ -2,11 +2,13 @@
 
 The approved Rust graph is exact-pinned in `Cargo.lock` and inventoried in
 `docs/dependencies.md`. Its direct runtime dependencies are `im 15.1.0` for the
-immutable model, `sha2 0.10.9` for canonical SHA-256 identities, and
-`rusqlite 0.40.1` with default features disabled and only `backup,bundled`
-enabled for transactional persistence. The selected `libsqlite3-sys 0.38.1`
-contains SQLite 3.53.2. Transitive runtime and build-host packages are approved
-only for those declared capabilities and target scopes.
+immutable model, `sha2 0.10.9` for canonical SHA-256 identities,
+`serde 1.0.228` and `serde_json 1.0.149` for versioned
+fixture/oracle/benchmark evidence, and `rusqlite 0.40.1` with default features
+disabled and only `backup,bundled` enabled for transactional persistence. The
+selected `libsqlite3-sys 0.38.1` contains SQLite 3.53.2. Transitive runtime and
+build-host packages are approved only for those declared capabilities and
+target scopes.
 
 Any addition, feature change, version change, source override, or target-scope
 change requires a reviewed manifest and lockfile update, SPDX license record,
@@ -36,6 +38,8 @@ version `3.53.2`, the pinned source ID, critical compile options, WAL mode, and
 `synchronous=FULL` before schema mutation.
 
 The core/model security owner reviews `im`, `sha2`, and their transitive graph;
+the fixture/oracle security owner reviews `serde`, `serde_json`, and their
+transitive graph;
 the persistence security owner reviews rusqlite, libsqlite3-sys, the embedded
 SQLite source, and data-recovery behavior; the build/release security owner
 reviews build-only crates, checksums, SBOM scope, and distributed notices. A

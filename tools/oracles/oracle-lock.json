@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "components": [
+    {
+      "role": "fixture-generator",
+      "version": "stitch-fixtures-rust-v1",
+      "source_path": "tools/fixtures/src/lib.rs",
+      "spec_identity": "stitch-fixtures-rust-v1",
+      "sha256": "0d1ee68518ab61f7ef4b2836bf4d86ab560f7738620fbd464484aa48c9bdba6e"
+    },
+    {
+      "role": "cpu-reference",
+      "version": "stitch-cpu-reference-v1",
+      "source_path": "tools/oracles/contracts/cpu-reference-v1.md",
+      "spec_identity": "stitch-cpu-reference-v1",
+      "sha256": "d8725af730556ef5f044d20bcb402063bb9a150170c82d66e79ec975ff888379"
+    },
+    {
+      "role": "oracle-verifier",
+      "version": "stitch-oracles-rust-v1",
+      "source_path": "tools/oracles/src/lib.rs",
+      "spec_identity": "stitch-oracles-rust-v1",
+      "sha256": "c0bce5fcf1624f5ceaac7394cc613512cafc05b04ee1a61a38a33ceb1cdbec06"
+    },
+    {
+      "role": "independent-verifier-contract",
+      "version": "stitch-independent-verifier-contract-v1",
+      "source_path": "tools/oracles/contracts/independent-verifier-contract-v1.md",
+      "spec_identity": "stitch-independent-verifier-contract-v1",
+      "sha256": "5e9b75b7f3066928fd96f8ea364b74cb5a8f1e93eaa80e6e80dac0b11c3185c3"
+    },
+    {
+      "role": "metadata-checker",
+      "version": "stitch-rec709-metadata-v1",
+      "source_path": "tools/oracles/contracts/metadata-checker-v1.md",
+      "spec_identity": "stitch-rec709-metadata-v1",
+      "sha256": "5ac6ca3f6100b679581108b076764d790caa032f06ad5f61804512a1a56d5d19"
+    },
+    {
+      "role": "tolerance-set",
+      "version": "stitch-oracle-tolerances-v1",
+      "source_path": "tools/oracles/contracts/tolerance-set-v1.json",
+      "spec_identity": "stitch-oracle-tolerances-v1",
+      "sha256": "9beb5be370bc84da45c0f0efa1fc6f023db1e0024f81f72276af5cfab4549b67"
+    }
+  ],
+  "tolerances": {
+    "timestamp_ticks": 0,
+    "audio_samples": 0,
+    "semantic_digest": "exact",
+    "rec709_metadata": "exact",
+    "floating_path_max_channel_error": 0,
+    "floating_path_rmse": 0
+  }
+}

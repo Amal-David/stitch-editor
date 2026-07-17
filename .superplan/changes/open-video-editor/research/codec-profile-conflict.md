@@ -2,9 +2,16 @@
 
 Verified: 2026-07-14
 
+## Decision recorded 2026-07-17
+
+The recommended path is selected: AAC-LC stereo at 48 kHz and 192 kb/s is the
+mandatory Windows/macOS baseline. AAC-LC 320 kb/s remains a separately reported
+optional capability. The system-codec/no-bundled-codec architecture and the
+distribution boundary below remain unchanged.
+
 ## Blocking profile mismatch
 
-The vertical-slice export profiles currently require AAC-LC stereo at 48 kHz
+The original vertical-slice export profiles required AAC-LC stereo at 48 kHz
 and 320 kb/s on every Windows and macOS acceptance machine. Microsoft's
 documented inbox Media Foundation AAC encoder accepts only 12,000, 16,000,
 20,000, or 24,000 encoded bytes per second for mono or stereo. The highest
@@ -20,7 +27,7 @@ output structure must be recorded and verified.
 
 Primary source: [Microsoft Media Foundation H.264 Video Encoder](https://learn.microsoft.com/en-us/windows/win32/medfound/h-264-video-encoder).
 
-## Required decision
+## Options considered
 
 1. Make AAC-LC 192 kb/s the mandatory cross-platform baseline and retain
    320 kb/s as a probed capability. This preserves the system-codec/no-bundled-
@@ -31,8 +38,9 @@ Primary source: [Microsoft Media Foundation H.264 Video Encoder](https://learn.m
 3. Change the mandatory audio codec/container promise. This is a larger product
    compatibility change and requires a new format decision.
 
-Until one path is selected, the exact baseline fixtures and export profile
-cannot be implemented honestly for Windows.
+The selected first path unblocks deterministic fixture and export-profile
+implementation without claiming that Windows supports the optional 320 kb/s
+profile.
 
 ## Distribution boundary
 

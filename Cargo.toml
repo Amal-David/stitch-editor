@@ -4,6 +4,9 @@ members = [
   "crates/editor-core",
   "crates/project-store",
   "native/c-abi/rust",
+  "tools/benchmark-harness",
+  "tools/fixtures",
+  "tools/oracles",
 ]
 resolver = "2"
 
